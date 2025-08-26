@@ -1,0 +1,65 @@
+/* src/components/Header/Header.module.css */
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 68px;
+  z-index: 100;
+  transition: all 0.5s ease-in;
+  /* 패딩을 내부 컨테이너로 옮깁니다. */
+  padding: 0;
+}
+
+.header_black {
+  background-color: #111;
+}
+
+.header_contents {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 30px; /* 좌우 여백 */
+}
+
+/* 로고와 아바타에서 position: fixed를 제거하여 flexbox 레이아웃에 포함시킵니다. */
+.header_logo {
+  width: 80px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.header_avatar {
+  width: 30px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* 새로 추가된 오른쪽 정렬 그룹 스타일 */
+.header_right {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* 검색창과 아바타 사이의 간격 */
+}
+
+/* 검색창 컨테이너에서 불필요한 스타일을 제거합니다. */
+.search_container {
+  position: relative;
+}
+
+.search_input {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 4px;
+  width: 250px; /* 너비 고정 */
+  transition: all 0.3s ease;
+}
+
+.search_input:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  outline: none;
+  border-color: white;
+}

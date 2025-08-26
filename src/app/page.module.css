@@ -1,0 +1,55 @@
+/* src/app/page.module.css */
+
+.app {
+  /* 전체 앱의 배경색을 어둡게 설정하여 넷플릭스 UI와 유사하게 만듭니다. */
+  background-color: #111;
+  color: white;
+}
+
+.search_results_container {
+  /* 헤더 뒤에 콘텐츠가 오도록 상단에 충분한 여백을 줍니다. */
+  padding-top: 100px;
+  padding-left: 30px;
+  padding-right: 30px;
+  min-height: 100vh; /* 최소 높이를 화면 전체로 설정 */
+}
+
+.message_text {
+  /* '검색 중...', '검색 결과 없음' 메시지 스타일 */
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  padding: 50px 0;
+}
+
+.search_grid {
+  /* 검색 결과를 그리드 형태로 정렬합니다. */
+  display: grid;
+  /* 화면 크기에 따라 열의 개수가 자동으로 조절됩니다. 
+     각 아이템의 최소 너비는 150px, 최대 너비는 1fr(균등 분할) 입니다. */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  /* 아이템 사이의 간격을 설정합니다. */
+  gap: 1rem;
+}
+
+.movie_card {
+  /* 개별 영화 포스터 카드 */
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  border-radius: 4px;
+  overflow: hidden; /* 이미지가 카드를 벗어나지 않도록 설정 */
+}
+
+.movie_card:hover {
+  /* 마우스를 올렸을 때 카드 크기를 살짝 키워 시각적 피드백을 줍니다. */
+  transform: scale(1.08);
+  z-index: 10;
+}
+
+.movie_poster {
+  /* 포스터 이미지 스타일 */
+  width: 100%;
+  /* 이미지 비율을 2:3으로 유지하여 세로 포스터 모양을 만듭니다. */
+  aspect-ratio: 2 / 3;
+  object-fit: cover; /* 비율에 맞게 이미지를 채웁니다. */
+}

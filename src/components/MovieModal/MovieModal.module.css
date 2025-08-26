@@ -1,0 +1,171 @@
+/* 키프레임 애니메이션 정의 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease-out; /* 나타날 때 애니메이션 */
+}
+
+.backdrop_closing {
+  animation: fadeOut 0.3s ease-out forwards; /* 사라질 때 애니메이션 */
+}
+
+.modal {
+  background-color: #181818;
+  color: white;
+  width: 90%;
+  max-width: 750px; /* 최대 너비를 850px에서 750px로 줄임 */
+  max-height: 90vh; /* 모달의 최대 높이를 화면의 90%로 제한 */
+  display: flex; /* 내부 아이템(배너, 콘텐츠) 정렬을 위해 flex 사용 */
+  flex-direction: column; /* 아이템을 세로로 쌓음 */
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  margin: 2rem 0;
+  animation: zoomIn 0.3s ease-out; /* 나타날 때 애니메이션 */
+}
+
+.modal_closing {
+  animation: zoomOut 0.3s ease-out forwards; /* 사라질 때 애니메이션 */
+}
+
+.close_button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #181818;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.modal_banner {
+  width: 100%;
+  height: 420px; /* 너비에 맞춰 높이도 약간 줄임 */
+  background-size: cover;
+  background-position: center top;
+  position: relative;
+}
+
+.banner_fade {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 7.4rem;
+  background-image: linear-gradient(180deg, transparent, rgba(37, 37, 37, 0.61), #181818);
+}
+
+.modal_content {
+  padding: 1.5rem 3rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.metadata {
+  display: flex;
+  gap: 1rem;
+  color: #a3a3a3;
+  margin-bottom: 1rem;
+}
+
+.rating {
+  color: #46d369;
+  font-weight: bold;
+}
+
+.tagline {
+  font-style: italic;
+  color: #a3a3a3;
+  margin-bottom: 1rem;
+}
+
+.overview {
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 75%;
+}
+
+.recommendations {
+  margin-top: 2rem;
+}
+
+.recommendations h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.rec_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.rec_card img {
+  width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+.toggle_button {
+  color: gray;
+}
