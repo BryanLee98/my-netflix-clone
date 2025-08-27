@@ -1,20 +1,23 @@
+// 1. 영화 DB의 기본 주소
 const BASE_URL = "https://api.themoviedb.org/3"
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY
-
+// 2. API 요청을 위한 객체 생성
 const api = {
+  // 3. GET 요청을 처리하는 비동기 함수
   get: async (path: string, params: Record<string, any> = {}) => {
+    // 4. URL 쿼리 파라미터 생성
     const queryParams = new URLSearchParams({
       api_key: API_KEY!,
       language: "ko-KR",
       ...params,
     })
-
+    // 5. 최종 요청 URL 생성
     const url = `${BASE_URL}${path}?${queryParams}`
-
+    // 6. 에러 관리를 위한 try catch
     try {
       const response = await fetch(url)
       if (!response.ok) {
-        // 에러 발생 시 더 자세한 정보를 콘솔에 출력합니다.
+        // 에러 발생 시 콘솔에 출력
         const errorData = await response.json()
         console.error("TMDB API 에러 응답:", errorData)
         throw new Error(`API call failed with status: ${response.status}`)
@@ -29,7 +32,7 @@ const api = {
 
 export default api
 
-// 요청 객체의 구조를 path와 params로 분리하여 명확하게 정의합니다.
+// 요청 객체의 구조를 path와 params로 분리하여 명확하게 정의
 export const requests = {
   fetchTrending: { path: "/trending/all/week" },
   fetchTopRated: { path: "/movie/top_rated" },

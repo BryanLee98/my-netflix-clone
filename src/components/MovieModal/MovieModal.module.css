@@ -50,7 +50,6 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  overflow-y: auto;
   animation: fadeIn 0.3s ease-out; /* 나타날 때 애니메이션 */
 }
 
@@ -67,7 +66,7 @@
   display: flex; /* 내부 아이템(배너, 콘텐츠) 정렬을 위해 flex 사용 */
   flex-direction: column; /* 아이템을 세로로 쌓음 */
   border-radius: 8px;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
   margin: 2rem 0;
   animation: zoomIn 0.3s ease-out; /* 나타날 때 애니메이션 */
@@ -114,6 +113,13 @@
 
 .modal_content {
   padding: 1.5rem 3rem;
+  overflow-y: auto;
+  /* 스크롤바 숨김 처리 */
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.modal_content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }
 
 .title {
