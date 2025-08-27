@@ -4,13 +4,14 @@ import { useState, useEffect } from "react"
 import styles from "./MovieModal.module.css"
 import api from "@/commons/settings/api"
 import { Movie } from "@/app/page"
+import { USE_MOVIE_MODAL } from "./hooks"
 
 type Props = {
   movie: Movie // 모달을 처음 열 때 사용할 영화 정보
   onClose: () => void
 }
 
-interface MovieDetails extends Movie {
+export interface MovieDetails extends Movie {
   runtime?: number
   episode_run_time?: number[]
   genres?: { id: number; name: string }[]
@@ -20,12 +21,27 @@ interface MovieDetails extends Movie {
 
 const base_url = "https://image.tmdb.org/t/p/original/"
 const MovieModal = ({ movie, onClose }: Props) => {
-  const [currentMovie, setCurrentMovie] = useState(movie)
-  const [details, setDetails] = useState<MovieDetails | null>(null)
-  const [recommendations, setRecommendations] = useState<Movie[]>([])
-  const [isClosing, setIsClosing] = useState(false)
-  // '더보기' 상태를 관리하는 새로운 state
-  const [isExpanded, setIsExpanded] = useState(false)
+  const {
+    currentMovie,
+    setCurrentMovie,
+    details,
+    setDetails,
+    recommendations,
+    setRecommendations,
+    isClosing,
+    setIsClosing,
+    isExpanded,
+    setIsExpanded,
+    handleClose,
+    handleBackdropClick,
+    handleRecommendationClick,
+    runtime,
+    overviewText,
+    OVERVIEW_CHAR_LIMIT,
+  } = USE_MOVIE_MODAL({
+    movie,
+    onClose,
+  })
 
   useEffect(() => {
     if (!currentMovie) return
@@ -42,39 +58,18 @@ const MovieModal = ({ movie, onClose }: Props) => {
         const recommendationsData = await api.get(`/${mediaType}/${currentMovie.id}/recommendations`)
         setRecommendations(recommendationsData.results.slice(0, 10))
       } catch (error) {
-        console.error("Failed to fetch details or recommendations:", error)
+        console.error("상세내용이나 비슷한 추천 불러오기 실패::", error)
       }
     }
 
     fetchData()
   }, [currentMovie])
 
-  const handleClose = () => {
-    setIsClosing(true)
-    setTimeout(() => {
-      onClose()
-    }, 300)
-  }
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      handleClose()
-    }
-  }
-
-  const handleRecommendationClick = (recMovie: Movie) => {
-    setCurrentMovie(recMovie)
-  }
-
   const renderLoading = () => (
     <div className={styles.loading_container}>
       <p>Loading...</p>
     </div>
   )
-
-  const runtime = details?.runtime || (details?.episode_run_time && details.episode_run_time[0])
-  const overviewText = details?.overview || ""
-  const OVERVIEW_CHAR_LIMIT = 100 // 약 2줄에 해당하는 글자 수 제한
 
   return (
     <div className={`${styles.backdrop} ${isClosing ? styles.backdrop_closing : ""}`} onClick={handleBackdropClick}>

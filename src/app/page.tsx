@@ -37,20 +37,20 @@ const Home = () => {
     setSelectedMovie(movie)
   }
 
-  // 모달을 닫는 핸들러
+  // 모달 닫기 핸들러
   const closeModal = () => {
     setSelectedMovie(null)
   }
   // 검색어가 변경될 때 실행되는 useEffect
   useEffect(() => {
     if (debouncedSearchTerm) {
-      // 새로운 검색이 시작되면 기존 결과와 페이지 번호를 초기화합니다.
+      // 새로운 검색이 시작되면 기존 결과와 페이지 번호를 초기화
       setSearchResults([])
       setPage(1)
       setHasMore(true)
       setIsSearching(true)
 
-      fetchSearchData(1) // 첫 페이지 데이터를 불러옵니다.
+      fetchSearchData(1) // 첫 페이지 데이터를 불러온다
     } else {
       setSearchResults([])
     }
@@ -64,11 +64,11 @@ const Home = () => {
         page: currentPage, // 페이지 번호를 파라미터로 전달
       })
 
-      // 기존 결과에 새로운 결과를 이어 붙입니다.
+      // 기존 결과에 새로운 결과를 이어 붙이기
       setSearchResults((prevResults) => [...prevResults, ...responseData.results])
 
-      // TMDB API는 마지막 페이지보다 더 요청하면 빈 배열을 줍니다.
-      // 받아온 결과가 없거나, 전체 페이지 수에 도달하면 더 이상 요청하지 않습니다.
+      // TMDB API는 마지막 페이지보다 더 요청하면 빈 배열을 주기 때문에,
+      // 받아온 결과가 없거나, 전체 페이지 수에 도달하면 더 이상 요청하지 않기
       if (responseData.results.length === 0 || responseData.page >= responseData.total_pages) {
         setHasMore(false)
       }
