@@ -1,3 +1,6 @@
+// >> 이렇게 코드 작성하면 영화 목록을 불러올 때 마다
+// 주소 하나하나 따로 함수를 만들거나 fetch 할 필요가 없음. << //
+
 // 1. 영화 DB의 기본 주소
 const BASE_URL = "https://api.themoviedb.org/3"
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY
@@ -11,8 +14,9 @@ const api = {
       language: "ko-KR",
       ...params,
     })
-    // 5. 최종 요청 URL 생성
+    // 5. 최종 요청 URL 생성, 위 1+3+4번을 합친 결과물.
     const url = `${BASE_URL}${path}?${queryParams}`
+    console.log("url::", url)
     // 6. 에러 관리를 위한 try catch
     try {
       const response = await fetch(url)

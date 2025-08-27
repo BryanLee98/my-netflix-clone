@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import styles from "./MovieModal.module.css"
-import api from "@/commons/settings/api"
 import { Movie } from "@/app/page"
 import { USE_MOVIE_MODAL } from "./hooks"
 
@@ -11,13 +10,16 @@ type Props = {
   onClose: () => void
 }
 
-export interface MovieDetails extends Movie {
-  runtime?: number
-  episode_run_time?: number[]
-  genres?: { id: number; name: string }[]
-  tagline?: string
-  vote_average?: number
-}
+// details 찍어서 안에 뭐있는지 보거나, api docs에 뭐들어있는지 친절히 알려줌.
+// 쓰고 싶은 것만 가져오면 됨.
+// export interface MovieDetails extends Movie {
+//   runtime?: number
+//   episode_run_time?: number[]
+//   genres?: { id: number; name: string }[]
+//   tagline?: string
+//   vote_average?: number
+//   last_episode_to_air?: { name: string; still_path: string }
+// }
 
 const base_url = "https://image.tmdb.org/t/p/original/"
 const MovieModal = ({ movie, onClose }: Props) => {
@@ -38,38 +40,24 @@ const MovieModal = ({ movie, onClose }: Props) => {
     runtime,
     overviewText,
     OVERVIEW_CHAR_LIMIT,
+    seasonDetails,
   } = USE_MOVIE_MODAL({
     movie,
     onClose,
   })
-
-  useEffect(() => {
-    if (!currentMovie) return
-    setDetails(null)
-    // 다른 영화로 전환될 때 '더보기' 상태를 초기화합니다.
-    setIsExpanded(false)
-
-    const mediaType = currentMovie.title ? "movie" : "tv"
-
-    const fetchData = async () => {
-      try {
-        const detailsData = await api.get(`/${mediaType}/${currentMovie.id}`)
-        setDetails(detailsData)
-        const recommendationsData = await api.get(`/${mediaType}/${currentMovie.id}/recommendations`)
-        setRecommendations(recommendationsData.results.slice(0, 10))
-      } catch (error) {
-        console.error("상세내용이나 비슷한 추천 불러오기 실패::", error)
-      }
-    }
-
-    fetchData()
-  }, [currentMovie])
+  console.log(details)
+  // 현재 선택된 시즌 번호를 관리하는 상태
+  const [selectedSeason, setSelectedSeason] = useState<number>(1)
 
   const renderLoading = () => (
     <div className={styles.loading_container}>
       <p>Loading...</p>
     </div>
   )
+
+  const mediaType = currentMovie.title ? "movie" : "tv"
+  // 선택된 시즌의 상세 정보를 찾습니다.
+  const currentSeasonData = seasonDetails.find((s) => s.season_number === selectedSeason)
 
   return (
     <div className={`${styles.backdrop} ${isClosing ? styles.backdrop_closing : ""}`} onClick={handleBackdropClick}>
@@ -115,6 +103,44 @@ const MovieModal = ({ movie, onClose }: Props) => {
                   </>
                 )}
               </p>
+
+              {/* TV 시리즈인 경우 시즌 및 에피소드 섹션 보이기 */}
+              {mediaType === "tv" && seasonDetails.length > 0 && (
+                <div className={styles.episodes_section}>
+                  <div className={styles.season_selector_wrapper}>
+                    <select
+                      className={styles.season_selector}
+                      value={selectedSeason}
+                      onChange={(e) => setSelectedSeason(Number(e.target.value))}
+                    >
+                      {seasonDetails.map((season) => (
+                        <option key={season.id} value={season.season_number}>
+                          {season.name} ({season.episodes?.length || 0} Episodes)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={styles.episodes_list}>
+                    {currentSeasonData?.episodes?.map((episode) => (
+                      <div key={episode.id} className={styles.episode_card}>
+                        <div className={styles.episode_thumbnail}>
+                          <img
+                            src={episode.still_path ? `${base_url}${episode.still_path}` : "/placeholder.png"}
+                            alt={episode.name}
+                          />
+                        </div>
+                        <div className={styles.episode_info}>
+                          <h4>
+                            {episode.episode_number}. {episode.name}
+                          </h4>
+                          <p>{episode.overview}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {recommendations.length > 0 && (
                 <div className={styles.recommendations}>
